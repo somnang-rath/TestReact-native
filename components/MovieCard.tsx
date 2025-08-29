@@ -10,7 +10,7 @@ export default function ProductCard({ product }: { product: Product }) {
       onPress={() =>
         router.push({
           pathname: "/movie/[id]",
-          params: { id: String(product.id) }, // id must be string
+          params: { id: String(product.id), name: product.name }, // id must be string
         })
       }
       activeOpacity={0.8}

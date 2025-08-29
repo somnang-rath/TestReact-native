@@ -11,7 +11,57 @@ export interface Product {
   image: string;
 }
 
-// Mock API functions for demonstration
+// Add or update cart item
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
+
+// In-memory cart
+let cart: CartItem[] = [];
+
+// Add or update item in cart
+export const addToCart = async (
+  id: number,
+  name: string,
+  price: number,
+  quantity: number,
+  image: string
+): Promise<CartItem[]> => {
+  try {
+    const existing = cart.find((item) => item.id === id);
+    if (existing) {
+      existing.quantity += quantity; // Increase quantity
+    } else {
+      cart.push({ id, name, price, quantity, image });
+    }
+    console.log("Cart updated:", cart);
+    return cart;
+  } catch (err) {
+    console.error("Add to cart error:", err);
+    return [];
+  }
+};
+
+// Get all cart items
+export const getCart = async (): Promise<CartItem[]> => {
+  return cart;
+};
+
+// Remove item from cart
+export const removeFromCart = async (id: number): Promise<CartItem[]> => {
+  cart = cart.filter((item) => item.id !== id);
+  return cart;
+};
+
+// Clear cart
+export const clearCart = async (): Promise<void> => {
+  cart = [];
+};
+
 export const getProducts = async (): Promise<Product[]> => {
   // In a real app, this would be a fetch to your API
   return [
@@ -43,7 +93,7 @@ export const getProducts = async (): Promise<Product[]> => {
     },
     {
       id: 3,
-      name: "MacBook Pro 16”",
+      name: "MacBook Pro 16",
       type: "laptop",
       price: 2499,
       category: "Laptop",

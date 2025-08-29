@@ -31,7 +31,13 @@ export default function RootLayout() {
         <Stack.Screen name="payment" />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ headerShown: false }} />
-        <Stack.Screen name="movie/[id]" options={{ title: "Movie Details" }} />
+        <Stack.Screen
+          name="movie/[id]"
+          options={{
+            animation: "fade",
+            animationTypeForReplace: "pop",
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

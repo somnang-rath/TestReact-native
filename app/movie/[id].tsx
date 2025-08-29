@@ -1,5 +1,5 @@
-import { getProducts, Product } from "@/utils/api";
-import { router, useLocalSearchParams } from "expo-router";
+import { addToCart, getProducts, Product } from "@/utils/api";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 export default function ProductDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
@@ -46,63 +47,74 @@ export default function ProductDetail() {
       </View>
     );
   }
+  const handleAddToCart = async () => {
+    if (!product) return;
 
+    const updatedCart = await addToCart(
+      product.id,
+      product.name,
+      product.price,
+      1, // default quantity
+      product.image
+    );
+
+    alert(`✅ ${product.name} added to cart!`);
+    console.log("Updated Cart:", updatedCart);
+  };
   return (
-    <ScrollView style={styles.container}>
-      {/* Poster */}
-      <Image
-        source={{ uri: product.image }}
-        style={styles.poster}
-        resizeMode="cover"
-      />
+    <>
+      <Stack.Screen options={{ title: product.name }} />
+      <ScrollView style={styles.container}>
+        {/* Poster */}
+        <Image
+          source={{ uri: product.image }}
+          style={styles.poster}
+          resizeMode="cover"
+        />
 
-      {/* Title & Info */}
-      <View style={styles.infoContainer}>
-        <Text style={styles.title}>{product.name}</Text>
-        <Text style={styles.subTitle}>
-          {product.category} • {product.price} • {product.stock}
-        </Text>
-        <Text style={styles.rating}>⭐ {product.price}</Text>
-      </View>
+        {/* Title & Info */}
+        <View style={styles.infoContainer}>
+          <Text style={styles.title}>{product.name}</Text>
+          <Text style={styles.subTitle}>
+            {product.category} • {product.price} • {product.stock}
+          </Text>
+          <Text style={styles.rating}>⭐ {product.price}</Text>
+        </View>
 
-      {/* Director & Cast */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Model</Text>
-        <Text style={styles.sectionContent}>{product.category}</Text>
-      </View>
+        {/* Director & Cast */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Model</Text>
+          <Text style={styles.sectionContent}>{product.category}</Text>
+        </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Brand</Text>
-        <Text style={styles.sectionContent}>{product?.brand}</Text>
-      </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Brand</Text>
+          <Text style={styles.sectionContent}>{product?.brand}</Text>
+        </View>
 
-      {/* Description */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Description</Text>
-        <Text style={styles.sectionContent}>{product.description}</Text>
-      </View>
-      {/* Add to Cart / Payment Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#3498db" }]}
-          onPress={() => router.push("/payment")}
-        >
-          <Text style={styles.buttonText}>Go to Payment</Text>
-        </TouchableOpacity>
+        {/* Description */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Description</Text>
+          <Text style={styles.sectionContent}>{product.description}</Text>
+        </View>
+        {/* Add to Cart / Payment Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#3498db" }]}
+            onPress={() => router.push("/payment")}
+          >
+            <Text style={styles.buttonText}>Go to Payment</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#27ae60" }]}
-          onPress={() =>
-            router.push({
-              pathname: "/payment",
-              params: { data: JSON.stringify(product) },
-            })
-          }
-        >
-          <Text style={styles.buttonText}>💳 Add to Cart / Pay</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#27ae60" }]}
+            onPress={() => handleAddToCart()}
+          >
+            <Text style={styles.buttonText}>💳 Add to Cart / Pay</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
   );
 }
 

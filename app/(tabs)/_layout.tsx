@@ -1,10 +1,26 @@
 import "@/global.css";
 import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import { TouchableOpacity } from "react-native";
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarBackground: () => (
+          <BlurView
+            intensity={30} // blur level (10 = small, 50 = strong)
+            tint="light" // light | dark | default
+            style={{ flex: 1, borderRadius: 20, overflow: "hidden" }}
+          />
+        ),
+        tabBarStyle: {
+          position: "absolute",
+          borderTopWidth: 0,
+          backgroundColor: "transparent",
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -29,12 +45,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="cartpage"
         options={{
-          title: "Explore",
+          title: "Cart",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="film" color={color} size={size} />
+            <Ionicons name="cart" color={color} size={size} />
           ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen

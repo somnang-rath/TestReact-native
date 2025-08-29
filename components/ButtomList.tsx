@@ -1,4 +1,6 @@
-import { Ionicons } from "@expo/vector-icons"; // icon set
+import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -21,27 +23,51 @@ export default function CategoryList({
 }: {
   handleSearchButton: (id: string) => void;
 }) {
-  const [selected, setSelected] = useState("1"); // default selected Chair
+  const [selected, setSelected] = useState("1");
 
   const renderItem = ({ item }: { item: (typeof categories)[0] }) => {
     const isActive = item.id === selected;
-    return (
-      <TouchableOpacity
-        style={[styles.card, isActive && styles.activeCard]}
-        onPress={() => {
-          handleSearchButton(String(item.name).toLowerCase());
-          setSelected(item.id);
-        }}
-      >
+
+    const CardContent = (
+      <>
         <Ionicons
           name={item.icon as any}
-          size={30}
+          size={20}
           color={isActive ? "#fff" : "#555"}
         />
         <Text style={[styles.label, isActive && styles.activeLabel]}>
           {item.name}
         </Text>
-      </TouchableOpacity>
+      </>
+    );
+
+    return (
+      <BlurView
+        intensity={0} // blur level (10 = small, 50 = strong)
+        tint="light" // light | dark | default
+        style={{ flex: 1, overflow: "hidden" }}
+      >
+        <TouchableOpacity
+          style={{ marginRight: 12 }}
+          onPress={() => {
+            handleSearchButton(String(item.name).toLowerCase());
+            setSelected(item.id);
+          }}
+        >
+          {isActive ? (
+            <LinearGradient
+              colors={["#3b82f6", "#06b6d4"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.card]}
+            >
+              {CardContent}
+            </LinearGradient>
+          ) : (
+            <View style={styles.card}>{CardContent}</View>
+          )}
+        </TouchableOpacity>
+      </BlurView>
     );
   };
 
@@ -60,29 +86,18 @@ export default function CategoryList({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 10,
-    marginLeft: 10,
-  },
   card: {
     width: 80,
-    height: 80,
+    height: 60,
     backgroundColor: "#fff",
     borderRadius: 16,
-    marginRight: 12,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  activeCard: {
-    backgroundColor: "linear-gradient(135deg, #3b82f6, #06b6d4)", // gradient won't work directly in RN
-    // backgroundColor: "#3b82f6", // fallback blue
+    // shadowColor: "#000",
+    // shadowOpacity: 0.05,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowRadius: 4,
+    // elevation: 3,
   },
   label: {
     marginTop: 5,

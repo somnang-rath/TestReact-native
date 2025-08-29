@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 10,
     paddingHorizontal: 16,
-    backgroundColor: "#F3F4F6", // gray-100
+    // backgroundColor: "#F3F4F6", // gray-100
   },
   searchInput: {
     color: "#1F1A1A",
