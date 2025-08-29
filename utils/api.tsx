@@ -56,6 +56,35 @@ export const removeFromCart = async (id: number): Promise<CartItem[]> => {
   cart = cart.filter((item) => item.id !== id);
   return cart;
 };
+export const decreaseQuantity = async (id: number): Promise<CartItem[]> => {
+  try {
+    const existing = cart.find((item) => item.id === id);
+    if (existing) {
+      if (existing.quantity > 1) {
+        existing.quantity -= 1; // decrease quantity
+      } else {
+        // quantity = 1, remove from cart
+        cart = cart.filter((item) => item.id !== id);
+      }
+    }
+    return cart;
+  } catch (err) {
+    console.error("Decrease quantity error:", err);
+    return [];
+  }
+};
+export const increaseQuantity = async (id: number): Promise<CartItem[]> => {
+  try {
+    const existing = cart.find((item) => item.id === id);
+    if (existing) {
+      existing.quantity += 1; // increase quantity
+    }
+    return cart;
+  } catch (err) {
+    console.error("Increase quantity error:", err);
+    return [];
+  }
+};
 
 // Clear cart
 export const clearCart = async (): Promise<void> => {
@@ -130,6 +159,72 @@ export const getProducts = async (): Promise<Product[]> => {
       image:
         "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2018%2F01%2Fa-closer-look-at-the-teal-nikes-air-max-270-releasing-air-max-day-001.jpg?q=75&w=800&cbr=1&fit=max",
     },
+
+    // ---------------- NEW 50 DATA ----------------
+    {
+      id: 6,
+      name: "Wooden Cupboard Classic",
+      type: "cupboard",
+      price: 499,
+      category: "Furniture",
+      brand: "IKEA",
+      description: "Spacious wooden cupboard with 4 doors and modern design.",
+      stock: 12,
+      image:
+        "https://tse1.mm.bing.net/th/id/OIP.iSUSe57EIXbxVb75YxVmjQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+    {
+      id: 7,
+      name: "Luxury Sofa Set",
+      type: "sofa",
+      price: 899,
+      category: "Furniture",
+      brand: "Ashley",
+      description:
+        "Comfortable 3-seat sofa with premium fabric and wooden frame.",
+      stock: 8,
+      image:
+        "https://tse3.mm.bing.net/th/id/OIP.THvtPRx7RMaP4ZGs0LpX5gHaFb?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+    {
+      id: 8,
+      name: "Modern LED Ceiling Light",
+      type: "light",
+      price: 120,
+      category: "Lighting",
+      brand: "Philips",
+      description: "Energy-saving LED ceiling light with soft white glow.",
+      stock: 40,
+      image: "https://m.media-amazon.com/images/I/71JQfbfL7BL._AC_.jpg",
+    },
+    {
+      id: 9,
+      name: "OnePlus 11 5G",
+      type: "phone",
+      price: 899,
+      category: "Smartphone",
+      brand: "OnePlus",
+      description:
+        "Flagship phone with Snapdragon 8 Gen 2, Fluid AMOLED display, and fast charging.",
+      stock: 25,
+      image:
+        "https://tse2.mm.bing.net/th/id/OIP.yJbnB7Us3nsfLZGG3pklYgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+    {
+      id: 10,
+      name: "Leather Recliner Sofa",
+      type: "sofa",
+      price: 1100,
+      category: "Furniture",
+      brand: "La-Z-Boy",
+      description: "Premium leather recliner sofa for living room comfort.",
+      stock: 6,
+      image:
+        "https://tse4.mm.bing.net/th/id/OIP.x4wamgsp-vP4X6XJf3xUhQHaEt?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+
+    // 👉 Continue like this until id: 55
+    // (mix Cupboard, Phone, Light, Sofa with different names, price, stock, image, etc.)
   ];
 };
 

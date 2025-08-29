@@ -59,7 +59,6 @@ export default function ProductDetail() {
     );
 
     alert(`✅ ${product.name} added to cart!`);
-    console.log("Updated Cart:", updatedCart);
   };
   return (
     <>
@@ -98,22 +97,27 @@ export default function ProductDetail() {
           <Text style={styles.sectionContent}>{product.description}</Text>
         </View>
         {/* Add to Cart / Payment Button */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#3498db" }]}
-            onPress={() => router.push("/payment")}
-          >
-            <Text style={styles.buttonText}>Go to Payment</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#27ae60" }]}
-            onPress={() => handleAddToCart()}
-          >
-            <Text style={styles.buttonText}>💳 Add to Cart / Pay</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#3498db" }]}
+          onPress={() =>
+            router.push({
+              pathname: "/payment",
+              params: { Total: product.price },
+            })
+          }
+        >
+          <Text style={styles.buttonText}>Go to Payment</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#27ae60" }]}
+          onPress={() => handleAddToCart()}
+        >
+          <Text style={styles.buttonText}>💳 Add to Cart / Pay</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 }
@@ -122,9 +126,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row", // buttons side by side
     justifyContent: "space-around",
-    marginTop: 20,
     marginBottom: 30,
     width: "100%",
+    paddingBottom: 5,
+    paddingTop: 5,
+    backgroundColor: "#fff",
   },
   button: {
     flex: 0.45, // take 45% width each

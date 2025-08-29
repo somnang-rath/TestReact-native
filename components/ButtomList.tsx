@@ -93,11 +93,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    // shadowColor: "#000",
-    // shadowOpacity: 0.05,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowRadius: 4,
-    // elevation: 3,
   },
   label: {
     marginTop: 5,

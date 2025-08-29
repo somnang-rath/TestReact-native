@@ -19,6 +19,8 @@ export default function TabLayout() {
           borderTopWidth: 0,
           backgroundColor: "transparent",
         },
+        animation: "fade",
+        headerShown: true,
       }}
     >
       <Tabs.Screen
@@ -58,6 +60,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: "Profile",
+          headerShown: true,
+
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" color={color} size={size} />
           ),

@@ -1,7 +1,14 @@
-import { CartItem, getCart, removeFromCart } from "@/utils/api";
+import {
+  CartItem,
+  decreaseQuantity,
+  getCart,
+  increaseQuantity,
+  removeFromCart,
+} from "@/utils/api";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import { router } from "expo-router";
+import React, { useState } from "react";
 import {
   FlatList,
   Image,
@@ -14,15 +21,13 @@ import {
 export default function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    const loadCart = async () => {
-      const cartItems = await getCart(); // wait for the Promise
-      setCart(cartItems); // now cartItems is CartItem[]
-    };
-
-    loadCart();
-  }, []);
+  const loadCart = async () => {
+    const cartItems = await getCart(); // wait for the Promise
+    setCart(cartItems); // now cartItems is CartItem[]
+  };
+  loadCart();
   const incrementQuantity = (id: number) => {
+    increaseQuantity(id);
     setCart((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
@@ -31,16 +36,16 @@ export default function CartPage() {
   };
 
   const decrementQuantity = (id: number) => {
+    decreaseQuantity(id);
     setCart((prev) =>
       prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
-          : item
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
       )
     );
   };
 
   const removeItem = (id: number) => {
+    removeFromCart(id);
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -59,7 +64,6 @@ export default function CartPage() {
           <TouchableOpacity
             style={styles.quantityButton}
             onPress={() => {
-              removeFromCart(item.id);
               decrementQuantity(item.id);
             }}
           >
@@ -100,7 +104,15 @@ export default function CartPage() {
               <Text style={styles.totalText}>Total:</Text>
               <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
             </View>
-            <TouchableOpacity style={styles.checkoutButton}>
+            <TouchableOpacity
+              style={styles.checkoutButton}
+              onPress={() =>
+                router.push({
+                  pathname: "/payment",
+                  params: { Total: totalPrice },
+                })
+              }
+            >
               <LinearGradient
                 colors={["#3b82f6", "#06b6d4"]}
                 start={{ x: 0, y: 0 }}
@@ -119,8 +131,9 @@ export default function CartPage() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 30,
     flex: 1,
-    backgroundColor: "#f7f7f7",
+    // backgroundColor: "#f7f7f7",
     padding: 10,
   },
   cartItem: {

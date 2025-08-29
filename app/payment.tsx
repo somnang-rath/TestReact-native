@@ -1,3 +1,6 @@
+import { clearCart } from "@/utils/api";
+import { router, useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,8 +13,21 @@ import {
 } from "react-native";
 
 export default function Payment() {
+  const { Total } = useLocalSearchParams<{ Total: string }>();
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardHolderName, setCardHolderName] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
+
   const handlePayment = () => {
-    Alert.alert("Payment Successful", "Your payment has been processed!");
+    if (cardNumber && cardHolderName && expiryDate && cvv) {
+      Alert.alert("Payment Successful", "Your payment has been processed!");
+      // Here you can also add logic to process the payment
+      router.replace("/"); // Navigate back to home after payment
+      clearCart();
+    } else {
+      Alert.alert("Payment Failed", "Please fill in all fields.");
+    }
   };
 
   return (
@@ -21,8 +37,10 @@ export default function Payment() {
     >
       <View style={styles.container}>
         <Text style={styles.header}>💳 Payment Page</Text>
-
+        <Text style={styles.total}>Total: ${Total}</Text>
         <TextInput
+          value={cardNumber}
+          onChangeText={setCardNumber}
           style={styles.input}
           placeholder="Card Number"
           keyboardType="numeric"
@@ -30,23 +48,29 @@ export default function Payment() {
         />
 
         <TextInput
+          value={cardHolderName}
+          onChangeText={setCardHolderName}
           style={styles.input}
           placeholder="Card Holder Name"
           placeholderTextColor="#888"
         />
 
         <TextInput
+          value={expiryDate}
+          onChangeText={setExpiryDate}
           style={styles.input}
           placeholder="Expiry Date (MM/YY)"
           placeholderTextColor="#888"
         />
 
         <TextInput
+          value={cvv}
+          onChangeText={setCvv}
           style={styles.input}
           placeholder="CVV"
-          // keyboardType="numeric"
+          keyboardType="numeric"
           placeholderTextColor="#888"
-          // secureTextEntry
+          secureTextEntry
         />
 
         <TouchableOpacity style={styles.payButton} onPress={handlePayment}>
@@ -63,6 +87,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
     justifyContent: "center",
+  },
+  total: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
   },
   header: {
     fontSize: 28,
