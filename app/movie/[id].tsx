@@ -70,7 +70,6 @@ export default function ProductDetail() {
           style={styles.poster}
           resizeMode="cover"
         />
-
         {/* Title & Info */}
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{product.name}</Text>

@@ -20,10 +20,10 @@ export default function Payment() {
   const [cvv, setCvv] = useState("");
 
   const handlePayment = () => {
+    // Here you can also add logic to process the payment
     if (cardNumber && cardHolderName && expiryDate && cvv) {
       Alert.alert("Payment Successful", "Your payment has been processed!");
-      // Here you can also add logic to process the payment
-      router.replace("/"); // Navigate back to home after payment
+      router.replace("/");
       clearCart();
     } else {
       Alert.alert("Payment Failed", "Please fill in all fields.");
@@ -65,11 +65,11 @@ export default function Payment() {
 
         <TextInput
           value={cvv}
-          onChangeText={setCvv}
           style={styles.input}
           placeholder="CVV"
           keyboardType="numeric"
           placeholderTextColor="#888"
+          onChangeText={setCvv}
           secureTextEntry
         />
 

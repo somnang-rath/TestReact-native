@@ -1,7 +1,7 @@
 import "@/global.css";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { TouchableOpacity } from "react-native";
 export default function TabLayout() {
   return (
@@ -64,6 +64,16 @@ export default function TabLayout() {
 
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" color={color} size={size} />
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.push("/editprofile")}>
+              <Ionicons
+                name="create"
+                color="#FAFFFB"
+                size={24}
+                style={{ marginRight: 12 }}
+              />
+            </TouchableOpacity>
           ),
         }}
       />
